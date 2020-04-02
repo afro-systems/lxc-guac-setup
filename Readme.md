@@ -2,7 +2,7 @@
 
 **Author**:  _quiet_
 
-### Download - [Debian 9 Stretch](https://cdimage.debian.org/cdimage/archive/9.9.0/amd64/iso-cd/debian-9.9.0-amd64-netinst.iso)
+## Download - [Debian 9 Stretch](https://cdimage.debian.org/cdimage/archive/9.9.0/amd64/iso-cd/debian-9.9.0-amd64-netinst.iso)
 It's a known good setup for guac. When I upgraded to Buster, I had problems.
 
 ### Login as your root user. For some reason, my debian lxc containers don't include sudo by default.. so.
@@ -14,7 +14,7 @@ root@guac:# usermod -aG sudo remotegod
 root@guac:# logout
 ```
 
-# Now log in as the user you created. Update all teh things.
+### Now log in as the user you created. Update all teh things.
 ```
 remotegod@guac:$ sudo apt update && sudo apt upgrade
 remotegod@guac:$ wget https://raw.githubusercontent.com/MysticRyuujin/guac-install/master/guac-install.sh
@@ -29,7 +29,7 @@ remotegod@guac:$ sudo ./guac-install --mysqlpwd password --guacpwd password
 remotegod@guac:$ rm -rf /etc/guacamole/extensions/guacamole-auth-totp-1.0.0.jar
 ```
 
-###  Now let's setup our proxy
+##  Now let's setup our proxy
 ```
 remotegod@guac:$ sudo apt install nginx certbot python-certbot-nginx apache2-utils
 ```
@@ -82,7 +82,7 @@ remotegod@guac:$ sudo certbot --nginx
 
 -- Follow the prompts, and ask it to auto redirect...DONE!
 
-### Couple more edits/hardening.
+## Couple more edits/hardening.
 
 -- Change your nginx config to look something like this now..
 ```
