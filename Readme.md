@@ -7,6 +7,7 @@ It's a known good setup for guac. When I upgraded to Buster, I had problems.
 
 ### Login as your root user. For some reason, my debian lxc containers don't include sudo by default.. so.
 ```
+root@guac:# apt update
 root@guac:# apt install sudo
 root@guac:# adduser remotegod
 root@guac:# usermod -aG sudo remotegod
