@@ -17,6 +17,8 @@ root@guac:# logout
 ### Now log in as the user you created. Update all teh things.
 ```
 remotegod@guac:$ sudo apt update && sudo apt upgrade
+remotegod@guac:$ sudo systemctl reboot
+
 remotegod@guac:$ wget https://raw.githubusercontent.com/MysticRyuujin/guac-install/master/guac-install.sh
 remotegod@guac:$ chmod +x guac-install.sh
 remotegod@guac:$ sudo ./guac-install --mysqlpwd password --guacpwd password
