@@ -21,7 +21,7 @@ remotegod@guac:$ sudo systemctl reboot
 
 remotegod@guac:$ wget https://raw.githubusercontent.com/MysticRyuujin/guac-install/master/guac-install.sh
 remotegod@guac:$ chmod +x guac-install.sh
-remotegod@guac:$ sudo ./guac-install --mysqlpwd password --guacpwd password
+remotegod@guac:$ sudo ./guac-install.sh --mysqlpwd <dbpassword> --guacpwd <dbpassword>
 ```
 
 ### So, now that Guacamole is installed.. it comes with two factor enabled by default.. which would be cool in any other circumstance right?
