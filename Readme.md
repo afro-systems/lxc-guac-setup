@@ -1,55 +1,58 @@
-# Setting up Guacamole
+# Setting up Apache Guacamole with Proxmox LXC Container
 
 **Author**:  _quiet_
 
-## Download - [Debian 9 Stretch](https://cdimage.debian.org/cdimage/archive/9.9.0/amd64/iso-cd/debian-9.9.0-amd64-netinst.iso)
-It's a known good setup for guac. When I upgraded to Buster, I had problems.
+## Download - [Debian 10 Buster](https://www.debian.org/News/2019/20190706)
 
-### Login as your root user. For some reason, my debian lxc containers don't include sudo by default.. so.
-```
-root@guac:# apt update
-root@guac:# apt install sudo
-root@guac:# adduser remotegod
-root@guac:# usermod -aG sudo remotegod
-root@guac:# logout
-```
+**Click** `local` under your pve host once logged in.
+**Click** `Templates` and **Download** `Debian 10`
+Once `Task OK` displays, exit the Dowload window and **Click** `New CT` on the top right of the Proxmox page.
 
-### Now log in as the user you created. Update all teh things.
-```
-remotegod@guac:$ sudo apt update && sudo apt upgrade
-remotegod@guac:$ sudo systemctl reboot
+- **Hostname:** guac
+- **Cores:** 1
+- **RAM:** 1024MB
 
-remotegod@guac:$ wget https://raw.githubusercontent.com/MysticRyuujin/guac-install/master/guac-install.sh
-remotegod@guac:$ chmod +x guac-install.sh
-remotegod@guac:$ sudo ./guac-install.sh --mysqlpwd <dbpassword> --guacpwd <dbpassword>
-```
+### Login into the container: `root@guac:#`. 
 
-### So, now that Guacamole is installed.. it comes with two factor enabled by default.. which would be cool in any other circumstance right?
+**_Note:_** Debian LXC containers don't include sudo by default.
 
--- Yeah.. so we gotta deal with that.
-```
-remotegod@guac:$ rm -rf /etc/guacamole/extensions/guacamole-auth-totp-1.0.0.jar
+```Bash
+add-apt-repository ppa:remmina-ppa-team/freerdp-daily
+apt update && apt upgrade
+apt install freerdp2-dev freerdp2-x11 sudo
+adduser remotegod
+usermod -aG sudo remotegod
+systemctl reboot
 ```
 
-##  Now let's setup our proxy
+### Now log in as `remotegod@guac:$`
+```Bash
+wget https://raw.githubusercontent.com/helperkeys/guac-install/master/guac-install.sh
+chmod +x guac-install.sh
+sudo ./guac-install.sh
 ```
-remotegod@guac:$ sudo apt install nginx certbot python-certbot-nginx apache2-utils
+
+**NOTE:** Answer N to TOTP and DUO. Y to mysql install. **YOU MUST PROVIDE PASSWORDS**
+
+##  nginx Reverse Proxy Setup 
+```Bash
+sudo apt install nginx certbot python-certbot-nginx apache2-utils
 ```
 
 ### Replace $USERNAME with a username of your choice, then it'll prompt you for a password.
-```
-remotegod@guac:$ sudo htpasswd -c /etc/nginx/.htpasswd $USERNAME
+```Bash
+sudo htpasswd -c /etc/nginx/.htpasswd $USERNAME
 ```
 
 ### Now let's setup our nginx guac config
-```
-remotegod@guac:$ sudo nano /etc/nginx/sites-available/guac
+```Bash
+sudo nano /etc/nginx/sites-available/guac
 ```
 
-### Nginx Configuration for Guacamole
+### nginx Configuration for Guacamole
 -- `$CODENAME` = subdomain, if you setup your domain/network that way.
 -- `$DOMAIN` = domain that you purchased. 
-```
+```nginx
 server {
     # Initial configuration
       server_name $CODENAME.$DOMAIN.com;
@@ -75,11 +78,11 @@ server {
 ```
 
 ### Cool, assuming your portforwarding is setup correctly on your router, now we're good to get certs.
-```
-remotegod@guac:$ sudo nginx -t
-remotegod@guac:$ sudo ln -s /etc/nginx/sites-available/guac /etc/nginx/sites-enabled/
-remotegod@guac:$ sudo systemctl reload nginx
-remotegod@guac:$ sudo certbot --nginx
+```Bash
+sudo nginx -t
+sudo ln -s /etc/nginx/sites-available/guac /etc/nginx/sites-enabled/
+sudo systemctl reload nginx
+sudo certbot --nginx
 ```
 
 -- Follow the prompts, and ask it to auto redirect...DONE!
@@ -87,10 +90,8 @@ remotegod@guac:$ sudo certbot --nginx
 ## Couple more edits/hardening.
 
 -- Change your nginx config to look something like this now..
-```
-remotegod@guac:$ sudo nano /etc/nginx/sites-available/guac
-```
-```
+`sudo nano /etc/nginx/sites-available/guac`
+```nginx
 server {
         # SSL configuration
         server_name $CODENAME.$DOMAIN.com;
@@ -132,10 +133,10 @@ server {
 
 ### There are some nginx defaults to change as well.
 -- Honestly, anything that's commented.. I'd just delete.
+```Bash
+sudo nano /etc/nginx/nginx.conf
 ```
-remotegod@guac:$ sudo nano /etc/nginx/nginx.conf
-```
-```
+```nginx
 user www-data;
 worker_processes auto;
 pid /run/nginx.pid;
@@ -223,13 +224,13 @@ http {
 ```
 
 ### Next we need to remove weak SSL ciphers. You can just delete everything from that file and add the content below.
-```
-remotegod@guac:$ sudo nano /etc/letsencrypt/options-ssl-nginx.conf
+```Bash
+sudo nano /etc/letsencrypt/options-ssl-nginx.conf
 ```
 
 -- This file contains important security parameters. If you modify this file manually, Certbot will be unable to automatically provide future security updates. Instead, Certbot will print and log an error message with a path to the up-to-date file that you will need to refer to when manually updating this file.
 
-```
+```nginx
 ssl_stapling on;
 ssl_stapling_verify on;
 
@@ -243,8 +244,9 @@ ssl_ciphers "ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECD
 ```
 
 ### Okay, that pretty much covers it. Make sure we didn't make any mistakes..
+```Bash
+sudo nginx -t
+sudo systemctl reload nginx
 ```
-remotegod@guac:$ sudo nginx -t
-remotegod@guac:$ sudo systemctl reload nginx
-```
+
 DONE!!
