@@ -37,16 +37,19 @@ sudo ./guac-install.sh
 **NOTE:** Answer N to TOTP and DUO. Y to mysql install. **YOU MUST PROVIDE PASSWORDS**
 
 ##  nginx Reverse Proxy Setup 
+
 ```Bash
 sudo apt install nginx certbot python-certbot-nginx apache2-utils
 ```
 
 ### Replace $USERNAME with a username of your choice, then it'll prompt you for a password.
+
 ```Bash
 sudo htpasswd -c /etc/nginx/.htpasswd $USERNAME
 ```
 
 ### Now let's setup our nginx guac config
+
 ```Bash
 sudo nano /etc/nginx/sites-available/guac
 ```
@@ -97,7 +100,9 @@ sudo certbot --nginx
 
 -- Change your nginx config to look something like this now..
 
-`sudo nano /etc/nginx/sites-available/guac`
+```Bash
+sudo nano /etc/nginx/sites-available/guac
+```
 
 ```nginx
 server {
@@ -236,7 +241,9 @@ http {
 
 ### Next we need to remove weak SSL ciphers. You can just delete everything from that file and add the content below.
 
-`sudo nano /etc/letsencrypt/options-ssl-nginx.conf`
+```Bash
+sudo nano /etc/letsencrypt/options-ssl-nginx.conf
+```
 
 -- This file contains important security parameters. If you modify this file manually, Certbot will be unable to automatically provide future security updates. Instead, Certbot will print and log an error message with a path to the up-to-date file that you will need to refer to when manually updating this file.
 
