@@ -5,7 +5,9 @@
 ## Download - [Debian 10 Buster](https://www.debian.org/News/2019/20190706)
 
 **Click** `local` under your pve host once logged in.
+
 **Click** `Templates` and **Download** `Debian 10`
+
 Once `Task OK` displays, exit the Dowload window and **Click** `New CT` on the top right of the Proxmox page.
 
 - **Hostname:** guac
@@ -50,8 +52,11 @@ sudo nano /etc/nginx/sites-available/guac
 ```
 
 ### nginx Configuration for Guacamole
+
 -- `$CODENAME` = subdomain, if you setup your domain/network that way.
--- `$DOMAIN` = domain that you purchased. 
+
+-- `$DOMAIN` = domain that you purchased.
+
 ```nginx
 server {
     # Initial configuration
@@ -78,6 +83,7 @@ server {
 ```
 
 ### Cool, assuming your portforwarding is setup correctly on your router, now we're good to get certs.
+
 ```Bash
 sudo nginx -t
 sudo ln -s /etc/nginx/sites-available/guac /etc/nginx/sites-enabled/
@@ -90,7 +96,9 @@ sudo certbot --nginx
 ## Couple more edits/hardening.
 
 -- Change your nginx config to look something like this now..
+
 `sudo nano /etc/nginx/sites-available/guac`
+
 ```nginx
 server {
         # SSL configuration
@@ -132,10 +140,13 @@ server {
 ```
 
 ### There are some nginx defaults to change as well.
+
 -- Honestly, anything that's commented.. I'd just delete.
+
 ```Bash
 sudo nano /etc/nginx/nginx.conf
 ```
+
 ```nginx
 user www-data;
 worker_processes auto;
@@ -224,9 +235,8 @@ http {
 ```
 
 ### Next we need to remove weak SSL ciphers. You can just delete everything from that file and add the content below.
-```Bash
-sudo nano /etc/letsencrypt/options-ssl-nginx.conf
-```
+
+`sudo nano /etc/letsencrypt/options-ssl-nginx.conf`
 
 -- This file contains important security parameters. If you modify this file manually, Certbot will be unable to automatically provide future security updates. Instead, Certbot will print and log an error message with a path to the up-to-date file that you will need to refer to when manually updating this file.
 
@@ -244,6 +254,7 @@ ssl_ciphers "ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECD
 ```
 
 ### Okay, that pretty much covers it. Make sure we didn't make any mistakes..
+
 ```Bash
 sudo nginx -t
 sudo systemctl reload nginx
