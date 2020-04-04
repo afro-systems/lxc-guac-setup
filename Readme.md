@@ -19,9 +19,10 @@ Once `Task OK` displays, exit the Dowload window and **Click** `New CT` on the t
 **_Note:_** Debian LXC containers don't include sudo by default.
 
 ```Bash
-add-apt-repository ppa:remmina-ppa-team/freerdp-daily
 apt update && apt upgrade
-apt install freerdp2-dev freerdp2-x11 sudo
+apt install software-properties-common
+add-apt-repository ppa:remmina-ppa-team/freerdp-daily
+apt install freerdp2-dev freerdp2-x11 sudo gpg
 adduser remotegod
 usermod -aG sudo remotegod
 systemctl reboot
@@ -29,7 +30,7 @@ systemctl reboot
 
 ### Now log in as `remotegod@guac:$`
 ```Bash
-wget https://raw.githubusercontent.com/helperkeys/guac-install/master/guac-install.sh
+wget https://raw.githubusercontent.com/MysticRyuujin/guac-install/master/guac-install.sh
 chmod +x guac-install.sh
 sudo ./guac-install.sh
 ```
@@ -69,13 +70,13 @@ server {
       #add_header X-Content-Type-Options nosniff always;
       #add_header X-Xss-Protection "1; mode=block" always;
       location / {
-           proxy_pass http://$GUACIP:8080/guacamole/;
+           proxy_pass http://127.0.0.1:8080/guacamole/;
            proxy_buffering off;
            proxy_http_version 1.1;
            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
            proxy_set_header Upgrade $http_upgrade;
            proxy_set_header Connection $http_connection;
-           #allow 10.0.0.0/24; # Local LAN
+           #allow 192.168.1.0/24; # Local LAN
            #allow 137.242.1.0/24; # AFNET
            auth_basic "Authorized Users Only!"; # Will prompt you for a username and password before you're always to get to this location.
            auth_basic_user_file /etc/nginx/.htpasswd; # passwd file for authentication
@@ -113,13 +114,13 @@ server {
         add_header X-Content-Type-Options nosniff always;
         add_header X-Xss-Protection "1; mode=block" always;
         location / {
-                proxy_pass http://$GUACIP:8080/guacamole/;
+                proxy_pass http://127.0.0.1:8080/guacamole/;
                 proxy_buffering off;
                 proxy_http_version 1.1;
                 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
                 proxy_set_header Upgrade $http_upgrade;
                 proxy_set_header Connection $http_connection;
-                allow 10.0.0.0/24; # Local LAN
+                allow 192.168.1.0/24; # Local LAN
                 allow 137.242.1.0/24; # AFNET
                 auth_basic "Authorized Users Only!";
                 auth_basic_user_file /etc/nginx/.htpasswd;
