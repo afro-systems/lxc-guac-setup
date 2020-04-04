@@ -1,7 +1,5 @@
 # Setting up Apache Guacamole with Proxmox LXC Container
 
-**Author**:  _quiet_
-
 ## Download - [Debian 10 Buster](https://www.debian.org/News/2019/20190706)
 
 **Click** `local` under your pve host once logged in.
