@@ -55,9 +55,9 @@ sudo nano /etc/nginx/sites-available/guac
 
 ### nginx Configuration for Guacamole
 
--- `$CODENAME` = subdomain, if you setup your domain/network that way.
+`$CODENAME` = subdomain, if you setup your domain/network that way.
 
--- `$DOMAIN` = domain that you purchased.
+`$DOMAIN` = domain that you purchased.
 
 ```nginx
 server {
@@ -93,11 +93,11 @@ sudo systemctl reload nginx
 sudo certbot --nginx
 ```
 
--- Follow the prompts, and ask it to auto redirect...DONE!
+Follow the prompts, and ask it to auto redirect...DONE!
 
 ## Couple more edits/hardening.
 
--- Change your nginx config to look something like this now..
+Change your nginx config to look something like this now..
 
 ```Bash
 sudo nano /etc/nginx/sites-available/guac
