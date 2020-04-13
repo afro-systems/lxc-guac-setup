@@ -74,8 +74,6 @@ server {
            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
            proxy_set_header Upgrade $http_upgrade;
            proxy_set_header Connection $http_connection;
-           #allow 192.168.1.0/24; # Local LAN
-           #allow 137.242.1.0/24; # AFNET
            auth_basic "Authorized Users Only!"; # Will prompt you for a username and password before you're always to get to this location.
            auth_basic_user_file /etc/nginx/.htpasswd; # passwd file for authentication
            #deny all; # If you're not accessing guac from home or NIPR, deny.
@@ -118,8 +116,6 @@ server {
                 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
                 proxy_set_header Upgrade $http_upgrade;
                 proxy_set_header Connection $http_connection;
-                allow 192.168.1.0/24; # Local LAN
-                allow 137.242.1.0/24; # AFNET
                 auth_basic "Authorized Users Only!";
                 auth_basic_user_file /etc/nginx/.htpasswd;
                 deny all;
