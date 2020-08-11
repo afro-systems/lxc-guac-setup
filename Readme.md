@@ -76,7 +76,6 @@ server {
            proxy_set_header Connection $http_connection;
            auth_basic "Authorized Users Only!"; # Will prompt you for a username and password before you're always to get to this location.
            auth_basic_user_file /etc/nginx/.htpasswd; # passwd file for authentication
-           #deny all; # If you're not accessing guac from home or NIPR, deny.
         }
     listen 80; # We'll setup our redirect after we have certs
 }
@@ -118,7 +117,6 @@ server {
                 proxy_set_header Connection $http_connection;
                 auth_basic "Authorized Users Only!";
                 auth_basic_user_file /etc/nginx/.htpasswd;
-                deny all;
         }
 
     listen 443 ssl; # managed by Certbot
